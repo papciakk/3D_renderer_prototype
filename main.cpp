@@ -3,10 +3,10 @@
 #include "main.h"
 #include "triangleBoundingBox.h"
 #include "mesh.h"
-#include "perFaceLighting.h"
 #include "perVertexLighting.h"
 
 auto lightPos = vec3f::create(0.0f, 0.0f, 15.0f);
+float scale = 1.0f;
 
 int main(int argc, char **argv) {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
@@ -31,6 +31,8 @@ int main(int argc, char **argv) {
         if (k['s']) lightPos.y += 1;
         if (k['q']) lightPos.z -= 1;
         if (k['e']) lightPos.z += 1;
+        if (k['z']) scale -= 0.1f;
+        if (k['x']) scale += 0.1f;
 
         SDL_Event event{};
         while (SDL_PollEvent(&event) != 0) {
@@ -104,9 +106,12 @@ void renderTile(const SDL_Surface *screen) {
         // project vertices to screen space
         for (int j = 0; j < 3; j++) {
             int vertexId = vertexIds[j];
-            vertices[j].x = static_cast<uint16_t>((model[vertexId][0] + 0.5) * 480 + 80);
-            vertices[j].y = static_cast<uint16_t>((model[vertexId][1] + 0.5) * 480);
-            depths[j] = model[vertexId][2] + 0.5f;
+            vec3f vertex = vec3f::create(model[vertexId][0], model[vertexId][1], model[vertexId][2]);
+            vertex = vertex * scale;
+
+            vertices[j].x = static_cast<uint16_t>((vertex.x + 0.5f) * 480 + 80);
+            vertices[j].y = static_cast<uint16_t>((vertex.y + 0.5f) * 480);
+            depths[j] = vertex.z + 0.5f;
         }
 
         float depths1[3] = {depths[2], depths[0], depths[1]}; // TODO: fix vertices order
