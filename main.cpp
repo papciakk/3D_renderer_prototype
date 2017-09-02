@@ -1,12 +1,12 @@
 #include <tuple>
 #include <ctime>
 #include "main.h"
-#include "triangleBoundingBox.h"
+#include "triangleMidpointTraversal.h"
 #include "mesh.h"
-#include "perFaceLighting.h"
 #include "perVertexLighting.h"
 
 auto lightPos = vec3f::create(0.0f, 0.0f, 15.0f);
+float scale = 1.0f;
 
 int main(int argc, char **argv) {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
@@ -31,6 +31,8 @@ int main(int argc, char **argv) {
         if (k['s']) lightPos.y += 1;
         if (k['q']) lightPos.z -= 1;
         if (k['e']) lightPos.z += 1;
+        if (k['z']) scale -= 0.1f;
+        if (k['x']) scale += 0.1f;
 
         SDL_Event event{};
         while (SDL_PollEvent(&event) != 0) {
@@ -104,9 +106,12 @@ void renderTile(const SDL_Surface *screen) {
         // project vertices to screen space
         for (int j = 0; j < 3; j++) {
             int vertexId = vertexIds[j];
-            vertices[j].x = static_cast<uint16_t>((model[vertexId][0] + 0.5) * 480 + 80);
-            vertices[j].y = static_cast<uint16_t>((model[vertexId][1] + 0.5) * 480);
-            depths[j] = model[vertexId][2] + 0.5f;
+            vec3f vertex = vec3f::create(model[vertexId][0], model[vertexId][1], model[vertexId][2]);
+            vertex = vertex * scale;
+
+            vertices[j].x = static_cast<uint16_t>((vertex.x + 0.5f) * 480 + 80);
+            vertices[j].y = static_cast<uint16_t>((vertex.y + 0.5f) * 480);
+            depths[j] = vertex.z + 0.5f;
         }
 
         float depths1[3] = {depths[2], depths[0], depths[1]}; // TODO: fix vertices order
@@ -131,14 +136,16 @@ void renderTile(const SDL_Surface *screen) {
             bounding_box_br.x = min(bounding_box_br.x, tile_br.x);
             bounding_box_br.y = min(bounding_box_br.y, tile_br.y);
 
-            Color *colors = perVertexLighting(vertexIds, lightPos);
+//            Color *colors = perVertexLighting(vertexIds, lightPos);
+            Color colors[3] = {Color(255, 0, 0), Color(), Color()};
 
             // intersection has positive area
             if (bounding_box_tl.x < bounding_box_br.x && bounding_box_tl.y < bounding_box_br.y) {
                 cntFacesProcessed++;
 
-                efficiency += drawTriangleBoundingBox(const_cast<SDL_Surface *>(screen), vertices, bounding_box_tl,
-                                                      bounding_box_br, colors, depths1, depthBuffer, tile_tl);
+                efficiency += drawTriangleMidpointTraversal(const_cast<SDL_Surface *>(screen), vertices,
+                                                            bounding_box_tl,
+                                                            bounding_box_br, colors, depths1, depthBuffer, tile_tl);
 
             }
 
@@ -151,7 +158,7 @@ void renderTile(const SDL_Surface *screen) {
 
 void putPixel(SDL_Surface *surface, int x, int y, uint8_t r, uint8_t g, uint8_t b) {
     Uint32 pixel = SDL_MapRGB(surface->format, r, g, b);
-    Uint8 *p = (Uint8 *) surface->pixels + y * surface->pitch + x * 4;
+    Uint8 *p = (Uint8 *) surface->pixels + (480-y) * surface->pitch + x * 4;
     *(Uint32 *) p = pixel;
 }
 
