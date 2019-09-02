@@ -13,4 +13,4 @@ set(SOURCE_FILES main.cpp main.h
         cfg.h
         perVertexLighting.cpp perVertexLighting.h)
 add_executable(3d_solid ${SOURCE_FILES})
-target_link_libraries(3d_solid  -lmingw32 ${SDL_LIBRARY})
+target_link_libraries(3d_solid -lmingw32 -lSDLmain -lSDL ${SDL_LIBRARY})

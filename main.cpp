@@ -5,7 +5,7 @@
 #include "mesh.h"
 #include "perVertexLighting.h"
 
-auto lightPos = vec3f::create(0.0f, 0.0f, 15.0f);
+auto lightPos = vec3f::create(30.0f, -30.0f, 15.0f);
 float scale = 1.0f;
 
 int main(int argc, char **argv) {

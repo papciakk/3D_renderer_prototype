@@ -2,7 +2,7 @@
 #define INC_3D_SOLID_MAIN_H
 
 #include <iostream>
-#include <SDL/SDL.h>
+#include <SDL.h>
 #include "vec3f.h"
 
 using namespace std;
