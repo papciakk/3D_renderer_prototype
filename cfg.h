@@ -1,7 +1,7 @@
 #ifndef INC_3D_SOLID_CFG_H
 
-#define SCREEN_WIDTH 128*6
-#define SCREEN_HEIGHT 128*6
+#define SCREEN_WIDTH 128*5
+#define SCREEN_HEIGHT 128*5
 
 #define TILE_RES_X 128
 #define TILE_RES_Y 128

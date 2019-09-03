@@ -53,7 +53,7 @@ int main(int argc, char **argv) {
 
 void redraw(SDL_Surface *screen) {
 
-    SDL_FillRect(screen, nullptr, 0);
+    SDL_FillRect(screen, nullptr, INT_MAX);
 
     renderMesh(screen);
 
