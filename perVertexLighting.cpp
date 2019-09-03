@@ -9,20 +9,17 @@ auto materialColor = Color(141, 202, 239);
 auto viewPos = vec3f::create(0, 1, 5);
 
 
-Color getLightingForVertex(int vertexId, vec3f lightPos);
+Color getLightingForVertex(vec3f positions, vec3f normal, vec3f lightPos);
 
-Color *perVertexLighting(int vertexIds[3], vec3f lightPos) {
+Color *perVertexLighting(vec3f positions[3], vec3f normals[3], vec3f lightPos) {
     auto *vertexColors = new Color[3];
-    vertexColors[0] = getLightingForVertex(vertexIds[2], lightPos);
-    vertexColors[1] = getLightingForVertex(vertexIds[0], lightPos);
-    vertexColors[2] = getLightingForVertex(vertexIds[1], lightPos);
+    vertexColors[0] = getLightingForVertex(positions[2], normals[2], lightPos);
+    vertexColors[1] = getLightingForVertex(positions[0], normals[0], lightPos);
+    vertexColors[2] = getLightingForVertex(positions[1], normals[1], lightPos);
     return vertexColors;
 }
 
-Color getLightingForVertex(int vertexId, vec3f lightPos) {
-    vec3f vertexPos = vec3f::create(model[vertexId][0], model[vertexId][1], model[vertexId][2]);
-    vec3f normal = vec3f::create(vertexNormals[vertexId][0], vertexNormals[vertexId][1], vertexNormals[vertexId][2]);
-
+Color getLightingForVertex(vec3f vertexPos, vec3f normal, vec3f lightPos) {
     normal = vec3f::normalize(normal);
     vec3f lightDir = vec3f::normalize(lightPos - vertexPos);
 

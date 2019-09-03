@@ -136,7 +136,19 @@ void renderTile(const SDL_Surface *screen) {
             bounding_box_br.x = min(bounding_box_br.x, tile_br.x);
             bounding_box_br.y = min(bounding_box_br.y, tile_br.y);
 
-            Color *colors = perVertexLighting(vertexIds, lightPos);
+            vec3f positions[3];
+            vec3f normals[3];
+            for(int k = 0; k < 3; k++) {
+                int vertexId = vertexIds[k];
+                vec3f vertexPos = vec3f::create(model[vertexId][0], model[vertexId][1], model[vertexId][2]);
+                vec3f normal = vec3f::create(vertexNormals[vertexId][0], vertexNormals[vertexId][1],
+                                             vertexNormals[vertexId][2]);
+
+                positions[k] = vertexPos;
+                normals[k] = normal;
+            }
+
+            Color *colors = perVertexLighting(positions, normals, lightPos);
 
             // intersection has positive area
             if (bounding_box_tl.x < bounding_box_br.x && bounding_box_tl.y < bounding_box_br.y) {
