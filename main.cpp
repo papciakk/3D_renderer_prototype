@@ -14,7 +14,7 @@ int main(int argc, char **argv) {
     }
     atexit(SDL_Quit);
 
-    SDL_Surface *screen = SDL_SetVideoMode(640, 480, 32, SDL_SWSURFACE | SDL_DOUBLEBUF);
+    SDL_Surface *screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32, SDL_SWSURFACE | SDL_DOUBLEBUF);
     if (screen == nullptr) {
         return showSDLError("SDL_SetVideoMode");
     }
@@ -75,8 +75,8 @@ void renderMesh(const SDL_Surface *screen) {
 
     clock_t t = clock();
 
-    for (uint16_t y = 0; y < 480; y += TILE_RES_Y) {
-        for (uint16_t x = 0; x < 640; x += TILE_RES_X) {
+    for (uint16_t y = 0; y < SCREEN_HEIGHT; y += TILE_RES_Y) {
+        for (uint16_t x = 0; x < SCREEN_WIDTH; x += TILE_RES_X) {
             tile_tl.x = x;
             tile_tl.y = y;
             tile_br.x = x + TILE_RES_X;
@@ -109,8 +109,8 @@ void renderTile(const SDL_Surface *screen) {
             vec3f vertex = vec3f::create(model[vertexId][0], model[vertexId][1], model[vertexId][2]);
             vertex = vertex * scale;
 
-            vertices[j].x = static_cast<uint16_t>((vertex.x + 0.5f) * 480 + 80);
-            vertices[j].y = static_cast<uint16_t>((vertex.y + 0.5f) * 480);
+            vertices[j].x = static_cast<uint16_t>((vertex.x + 0.5f) * SCREEN_HEIGHT + (SCREEN_WIDTH - SCREEN_HEIGHT) / 2);
+            vertices[j].y = static_cast<uint16_t>((vertex.y + 0.5f) * SCREEN_HEIGHT);
             depths[j] = vertex.z + 0.5f;
         }
 

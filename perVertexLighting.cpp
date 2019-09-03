@@ -4,7 +4,7 @@
 float ambientMultiplier = 0.2f;
 float diffuseMultiplier = 1.0f;
 float specularMultiplier = 1.0f;
-float shininness = 16.0f;
+float shininness = 8.0f;
 auto materialColor = Color(141, 202, 239);
 auto viewPos = vec3f::create(0, 1, 5);
 
