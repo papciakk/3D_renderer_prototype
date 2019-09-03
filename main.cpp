@@ -3,7 +3,7 @@
 #include "main.h"
 #include "triangleBoundingBox.h"
 #include "mesh.h"
-#include "perVertexLighting.h"
+#include "perPixelLighting.h"
 
 auto lightPos = vec3f::create(30.0f, -30.0f, 15.0f);
 float scale = 1.0f;
@@ -148,14 +148,13 @@ void renderTile(const SDL_Surface *screen) {
                 normals[k] = normal;
             }
 
-            Color *colors = perVertexLighting(positions, normals, lightPos);
-
             // intersection has positive area
             if (bounding_box_tl.x < bounding_box_br.x && bounding_box_tl.y < bounding_box_br.y) {
                 cntFacesProcessed++;
 
                 efficiency += drawTriangleBoundingBox(const_cast<SDL_Surface *>(screen), vertices, bounding_box_tl,
-                                                      bounding_box_br, colors, depths1, depthBuffer, tile_tl);
+                                                      bounding_box_br, depths1, depthBuffer, tile_tl,
+                                                      positions, normals, lightPos);
 
             }
 
