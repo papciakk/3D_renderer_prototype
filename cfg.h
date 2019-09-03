@@ -1,7 +1,10 @@
 #ifndef INC_3D_SOLID_CFG_H
 
-#define TILE_RES_X 160
-#define TILE_RES_Y 120
+#define SCREEN_WIDTH 128*6
+#define SCREEN_HEIGHT 128*6
+
+#define TILE_RES_X 128
+#define TILE_RES_Y 128
 #define ENABLE_CULLING
 #define Z_BUFFERING
 
