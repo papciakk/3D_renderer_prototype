@@ -11,6 +11,6 @@ set(SOURCE_FILES main.cpp main.h
         mesh.h
         vec3f.h color.h
         cfg.h
-        perPixelLighting.cpp perPixelLighting.h)
+        perVertexLighting.cpp perVertexLighting.h)
 add_executable(3d_solid ${SOURCE_FILES})
 target_link_libraries(3d_solid -lmingw32 -lSDLmain -lSDL ${SDL_LIBRARY})
